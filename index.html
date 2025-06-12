@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blackened Guess: Tool or Dimir?</title>
+  <style>
+    /* ----- Black‑metal vibe ----- */
+    @font-face {
+      font-family: "BlackMetal";
+      src: url("blackmetal.ttf"); /* supply your own font */
+    }
+
+    :root {
+      --bg:#000;
+      --fg:#eee;
+      --accent:#666;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:"BlackMetal",Arial,Helvetica,sans-serif;text-align:center;}
+
+    h1{font-size:3rem;margin:1rem 0;letter-spacing:2px;}
+
+    #game{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;}
+
+    .image-container{position:relative;width:80vw;max-width:600px;aspect-ratio:3/4;overflow:hidden;margin-bottom:1rem;}
+    .image-container img{width:100%;height:100%;object-fit:cover;filter:blur(20px);transition:filter .4s ease;}
+    .image-container.revealed img{filter:none;}
+
+    button{margin:.5rem;padding:.6rem 1.2rem;font-size:1rem;border:2px solid var(--accent);background:#111;color:var(--fg);border-radius:4px;cursor:pointer;user-select:none;}
+    button:hover{background:#222;}
+    button:disabled{opacity:.4;cursor:not-allowed;}
+
+    #score{margin-top:1rem;font-size:1.2rem;}
+  </style>
+</head>
+<body>
+  <h1>Tool Poster or Dimir Card?</h1>
+  <div id="game">
+    <div class="image-container"><img id="card-img" src="" alt="blurred art"></div>
+    <div>
+      <button data-guess="tool">TOOL</button>
+      <button data-guess="mtg">DIMIR</button>
+    </div>
+    <div id="score"></div>
+  </div>
+
+<script>
+/* -----------------------------------------------------------------
+   20 hot‑linked images (10 TOOL art, 10 Dimir MTG card art).
+   No libraries, no API keys required.
+------------------------------------------------------------------*/
+const allImages = [
+  // TOOL covers & posters
+  {src:'https://upload.wikimedia.org/wikipedia/en/9/9a/10000Days.jpg',type:'tool'},
+  {src:'https://upload.wikimedia.org/wikipedia/en/6/6b/Aenima.jpg',type:'tool'},
+  {src:'https://upload.wikimedia.org/wikipedia/en/4/4c/Tool_-_Lateralus.jpg',type:'tool'},
+  {src:'https://upload.wikimedia.org/wikipedia/en/2/2d/Tool-Undertow.jpg',type:'tool'},
+  {src:'https://upload.wikimedia.org/wikipedia/en/5/53/Opiate_2019.jpg',type:'tool'},
+  {src:'https://tool-posters.com/wp-content/uploads/2020/01/2007.01.31-Sidney-Myer-Music-Bowl-Melbourne-AUS-Ken-Taylor-200x300.png',type:'tool'},
+  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQ660aJXsAA9wSK-771x1024.jpg',type:'tool'},
+  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQW1nzgWkAAk2PK-771x1024.jpg',type:'tool'},
+  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GRATSZvWkAANqLP-771x1024.jpg',type:'tool'},
+  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQnGtRMXUAAv-5f-771x1024.jpg',type:'tool'},
+  // MTG Dimir arts via Scryfall image endpoint
+  {src:'https://api.scryfall.com/cards/named?exact=Dimir%20Cutpurse&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Lazav,%20Dimir%20Mastermind&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Notion%20Thief&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Thief%20of%20Sanity&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Consuming%20Aberration&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Hostage%20Taker&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Shadowmage%20Infiltrator&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Baleful%20Strix&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Drown%20in%20the%20Loch&format=image',type:'mtg'},
+  {src:'https://api.scryfall.com/cards/named?exact=Sire%20of%20Stagnation&format=image',type:'mtg'},
+];
+
+// --- Utility ---
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+const images = shuffle([...allImages]);
+let idx=0,score=0;
+
+const imgEl=document.getElementById('card-img');
+const wrap=document.querySelector('.image-container');
+const scoreEl=document.getElementById('score');
+const buttons=document.querySelectorAll('button[data-guess]');
+
+function load(){
+  if(idx>=images.length){return finale();}
+  wrap.classList.remove('revealed');
+  imgEl.src=images[idx].src;
+  scoreEl.textContent=`Score: ${score} / ${idx}`;
+}
+
+function check(guess){
+  const ok=guess===images[idx].type;
+  if(ok) score++;
+  wrap.classList.add('revealed');
+  scoreEl.textContent=`${ok?'Correct':'Wrong'} — Score: ${score} / ${idx+1}`;
+  setTimeout(()=>{idx++;load();},800);
+}
+
+buttons.forEach(b=>b.addEventListener('click',()=>check(b.dataset.guess)));
+
+function finale(){
+  const best=Number(localStorage.getItem('blackenedBest')||0);
+  if(score>best){localStorage.setItem('blackenedBest',score);}  
+  scoreEl.textContent=`Final: ${score}/${images.length} (Best: ${Math.max(score,best)})`;
+  imgEl.src='https://i.imgur.com/DaN0Rnn.jpeg'; // optional end splash
+  buttons.forEach(b=>b.disabled=true);
+}
+
+load();
+</script>
+</body>
+</html>
