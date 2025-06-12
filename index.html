@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Blackened Guess: Tool or Dimir?</title>
-  <style>
-    /* ----- Black‑metal vibe ----- */
-    @font-face {
-      font-family: "BlackMetal";
-      src: url("blackmetal.ttf"); /* supply your own font */
-    }
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Metal+Mania&display=swap" rel="stylesheet">
+  <style>
     :root {
       --bg:#000;
       --fg:#eee;
@@ -17,7 +15,7 @@
     }
 
     *{box-sizing:border-box;}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:"BlackMetal",Arial,Helvetica,sans-serif;text-align:center;}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:"Crimson Text",Arial,Helvetica,sans-serif;text-align:center;}
 
     h1{font-size:3rem;margin:1rem 0;letter-spacing:2px;}
 
@@ -52,27 +50,21 @@
 ------------------------------------------------------------------*/
 const allImages = [
   // TOOL covers & posters
-  {src:'https://upload.wikimedia.org/wikipedia/en/9/9a/10000Days.jpg',type:'tool'},
-  {src:'https://upload.wikimedia.org/wikipedia/en/6/6b/Aenima.jpg',type:'tool'},
-  {src:'https://upload.wikimedia.org/wikipedia/en/4/4c/Tool_-_Lateralus.jpg',type:'tool'},
+  {src:'https://i.ebayimg.com/images/g/JaYAAOSwsJJiOI-d/s-l1200.jpg',type:'tool'},
+  {src:'https://s38825.pcdn.co/wp-content/uploads/2018/09/9-13-18ChaneyAlex-GreyOversoul.jpg',type:'tool'},
+  {src:'https://dannycarey.com/wp-content/uploads/2023/11/399395628_856086095889262_145982462093538116_n.jpg',type:'tool'},
   {src:'https://upload.wikimedia.org/wikipedia/en/2/2d/Tool-Undertow.jpg',type:'tool'},
-  {src:'https://upload.wikimedia.org/wikipedia/en/5/53/Opiate_2019.jpg',type:'tool'},
-  {src:'https://tool-posters.com/wp-content/uploads/2020/01/2007.01.31-Sidney-Myer-Music-Bowl-Melbourne-AUS-Ken-Taylor-200x300.png',type:'tool'},
-  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQ660aJXsAA9wSK-771x1024.jpg',type:'tool'},
-  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQW1nzgWkAAk2PK-771x1024.jpg',type:'tool'},
-  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GRATSZvWkAANqLP-771x1024.jpg',type:'tool'},
-  {src:'https://tool-posters.com/wp-content/uploads/2024/06/GQnGtRMXUAAv-5f-771x1024.jpg',type:'tool'},
+  {src:'https://www.alexgrey.com/img/containers/art_images/Study-for-the-Great-Turn_2020_Alex-Grey.jpg/f5a05d36f5407db987cc95919f940547.jpg',type:'tool'},
+  {src:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1Xw4P4VlZqh62xY-pFpaSzLKaK9LP4ihKrQ&s',type:'tool'},
+  
   // MTG Dimir arts via Scryfall image endpoint
-  {src:'https://api.scryfall.com/cards/named?exact=Dimir%20Cutpurse&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Lazav,%20Dimir%20Mastermind&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Notion%20Thief&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Thief%20of%20Sanity&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Consuming%20Aberration&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Hostage%20Taker&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Shadowmage%20Infiltrator&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Baleful%20Strix&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Drown%20in%20the%20Loch&format=image',type:'mtg'},
-  {src:'https://api.scryfall.com/cards/named?exact=Sire%20of%20Stagnation&format=image',type:'mtg'},
+  {src:'https://www.cvltnation.com/wp-content/uploads/2014/11/janparker3110614.jpg',type:'mtg'},
+  {src:'https://magic.facetofacegames.com/wp-content/uploads/2018/11/cryptic-command.jpg',type:'mtg'},
+  {src:'https://monocolormagic.com/wp-content/uploads/2024/02/necropotence-art-1024x771.webp',type:'mtg'},
+  {src:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCRoZD2RddsgbYxWqkxXuTpy9Nd0p9l1mN3A&s',type:'mtg'},
+  {src:'https://draftsim.com/wp-content/uploads/2022/04/Unmask-Illustration-by-rk-post-819x1024.jpg',type:'mtg'},
+  {src:'https://mktg-assets.tcgplayer.com/fit-in/1000x1000/filters:quality(75)/content/opengraph/MTG-Unmake-PROMO.jpg',type:'mtg'},
+  {src:'https://scentofagamer.wordpress.com/wp-content/uploads/2019/09/eldc_giantkiller_shawnwood.jpg?w=859',type:'mtg'},
 ];
 
 // --- Utility ---
